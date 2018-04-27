@@ -1,8 +1,14 @@
 <template>
-  <div class="home">
+  <div class="header">
     <h1>TODO list</h1>
     <div class="list">
-      <div class="item"> item 1 </div>
+      <ul class="items">
+        <router-link v-for="(item, index) in items" :key="index" to="/todoitem/">
+          <li>
+            {{ item.title }} <span class="priority badge">{{ item.priority }}</span>
+          </li>
+        </router-link>
+      </ul>
     </div>
   </div>
 </template>
@@ -12,26 +18,108 @@ export default {
   name: 'TodoList',
   data () {
     return {
-      list: '\'list\' prop of \'data\' object'
+      list: '\'list\' prop of \'data\' object',
+      items: [
+        {
+          title: 'Get some milk',
+          content: '2.8 / 3.2 milk fat',
+          priority: 0
+        },
+        {
+          title: 'Go to work',
+          content: 'again',
+          priority: 1
+        },
+        {
+          title: 'Do whatever you want',
+          content: 'as long as you can',
+          priority: 2
+        }
+      ]
     }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
+<style>
+.items ul {
+    padding: 50px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+/* Style the list items */
+ul.items li {
+  padding: 12px 8px 12px 40px;
+  background: #eee;
+  color: #000;
+  font-size: 18px;
+  transition: 0.2s;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+/* Darker background-color on hover */
+ul.items li:hover {
+  background: rgb(168, 168, 168);
 }
-a {
-  color: #42b983;
+
+/* done items have gray background and striked-out text */
+ul.items li.checked {
+  background: #888;
+  color: #fff;
+  text-decoration: line-through;
+}
+
+/* Add a "checked" mark for done items */
+ul.items li.checked::before {
+  content: '';
+  position: absolute;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+
+/* Style the header */
+.header {
+  background-color: #369;
+  padding: 30px 40px;
+  color: #fff;
+  text-align: center;
+}
+
+/* Clear floats after the header */
+.header:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* priority styles: 0 - low, 1 - mid, 2 - high */
+
+.priority {
+  float: right;
+}
+
+.badge.p-0::after {
+  content: "low";
+}.p-0 {
+  background-color: #20ff20;
+}
+
+.badge.p-1::after {
+  content: "mid";
+}
+.p-1 {
+  background-color: #2088ff;
+}
+
+.badge.p-2::after {
+  content: "high";
+}
+.p-2 {
+  background-color: #ff2020;
 }
 </style>
