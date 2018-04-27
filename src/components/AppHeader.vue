@@ -2,18 +2,18 @@
   <nav>
     <ul>
       <li>
-        <router-link to="/" exact>Home</router-link>
+        <router-link :to="{ name: 'TodoList' }" exact>Home</router-link>
       </li>
       <li>
-        <router-link to="/create" exact>Create a TODO</router-link>
+        <router-link :to="{ name: 'CreateItem' }" exact>Create a TODO</router-link>
       </li>
     </ul>
     <ul id="auth">
       <li>
-        <router-link to="/login" exact>Login</router-link>
+        <router-link :to="{ name: 'AppLogin' }" exact>Login</router-link>
       </li>
       <li>
-        <router-link to="/register" exact>Register</router-link>
+        <router-link :to="{ name: 'AppRegister' }" exact>Register</router-link>
       </li>
     </ul>
   </nav>
@@ -23,7 +23,7 @@
 export default {}
 </script>
 
-<style>
+<style scoped>
 nav {
     background: #444;
     padding: 14px 0;

@@ -6,12 +6,14 @@
 </template>
 
 <script>
-import header from './components/Header.vue'
+import AppHeader from './components/AppHeader.vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 export default {
   name: 'App',
   components: {
-    'app-header': header
+    AppHeader
   }
 }
 </script>
@@ -25,7 +27,15 @@ export default {
   color: #2c3e50;
 }
 
-body {
+body, ul {
     margin: 0;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+li {
+  list-style-type: none;
 }
 </style>
