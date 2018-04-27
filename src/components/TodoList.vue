@@ -3,9 +3,11 @@
     <h1>TODO list</h1>
     <div class="list">
       <ul class="items">
-        <router-link v-for="(item, index) in items" :key="index" to="/todoitem/">
+        <router-link v-for="(item, index) in items" :key="index"
+          :to="{path: '/todoitems/' + item.id}">
           <li>
-            {{ item.title }} <span class="priority badge">{{ item.priority }}</span>
+            {{ item.title }}
+            <span v-bind:class="['priority badge badge-pill priority-' + item.priority]">&nbsp;</span>
           </li>
         </router-link>
       </ul>
@@ -21,16 +23,19 @@ export default {
       list: '\'list\' prop of \'data\' object',
       items: [
         {
+          id: 1,
           title: 'Get some milk',
           content: '2.8 / 3.2 milk fat',
           priority: 0
         },
         {
+          id: 2,
           title: 'Go to work',
           content: 'again',
           priority: 1
         },
         {
+          id: 3,
           title: 'Do whatever you want',
           content: 'as long as you can',
           priority: 2
@@ -101,25 +106,28 @@ ul.items li.checked::before {
 
 .priority {
   float: right;
+  text-align: center !important;
+  /* padding: 0px 5px; */
 }
 
-.badge.p-0::after {
+.badge.priority-0::after {
   content: "low";
-}.p-0 {
+}
+.priority-0 {
   background-color: #20ff20;
 }
 
-.badge.p-1::after {
+.badge.priority-1::after {
   content: "mid";
 }
-.p-1 {
+.priority-1 {
   background-color: #2088ff;
 }
 
-.badge.p-2::after {
+.badge.priority-2::after {
   content: "high";
 }
-.p-2 {
+.priority-2 {
   background-color: #ff2020;
 }
 </style>
