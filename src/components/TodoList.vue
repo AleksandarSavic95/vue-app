@@ -17,24 +17,31 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'TodoList',
   computed: {
     items () {
       return this.$store.state.items
     },
-    hardItems () {
-      return this.$store.getters.hardItems
-    }
+    // hardItems () {
+    //   return this.$store.getters.hardItems
+    // }
+    ...mapGetters([
+      'hardItems' // , 'secondGetter'
+    ])
   },
   data () {
     return {}
   },
   methods: {
-    changePriorities: function (increment) {
-      // this.$store.commit('changePriorities')
-      this.$store.dispatch('changePriorities', increment)
-    }
+    // changePriorities: function (increment) {
+    //   this.$store.dispatch('changePriorities', increment)
+    // }
+    ...mapActions([
+      'changePriorities'
+    ])
   }
 }
 </script>
