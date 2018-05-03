@@ -39,5 +39,19 @@ export const store = new Vuex.Store({
       })
       return hardItems
     }
+  },
+  mutations: {
+    changePriorities: (state, payload) => {
+      store.state.items.forEach(item => {
+        item.priority = (item.priority + payload) % 3
+      })
+    }
+  },
+  actions: {
+    changePriorities: (context, payload) => {
+      setTimeout(function () {
+        context.commit('changePriorities', payload)
+      }, 2000)
+    }
   }
 })

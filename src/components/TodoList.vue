@@ -12,6 +12,7 @@
         </router-link>
       </ul>
     </div>
+    <button v-on:click="changePriorities(2)">Change priorities</button>
   </div>
 </template>
 
@@ -28,6 +29,12 @@ export default {
   },
   data () {
     return {}
+  },
+  methods: {
+    changePriorities: function (increment) {
+      // this.$store.commit('changePriorities')
+      this.$store.dispatch('changePriorities', increment)
+    }
   }
 }
 </script>
