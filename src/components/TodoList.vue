@@ -18,30 +18,16 @@
 <script>
 export default {
   name: 'TodoList',
-  data () {
-    return {
-      list: '\'list\' prop of \'data\' object',
-      items: [
-        {
-          id: 1,
-          title: 'Get some milk',
-          content: '2.8 / 3.2 milk fat',
-          priority: 0
-        },
-        {
-          id: 2,
-          title: 'Go to work',
-          content: 'again',
-          priority: 1
-        },
-        {
-          id: 3,
-          title: 'Do whatever you want',
-          content: 'as long as you can',
-          priority: 2
-        }
-      ]
+  computed: {
+    items () {
+      return this.$store.state.items
+    },
+    hardItems () {
+      return this.$store.getters.hardItems
     }
+  },
+  data () {
+    return {}
   }
 }
 </script>
