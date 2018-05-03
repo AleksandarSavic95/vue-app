@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { LOGIN, LOGIN_SUCCESS, LOGOUT } from '../constants'
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    list: '\'list\' prop of \'data\' object',
+    isLoggedIn: localStorage.getItem('token'),
+    pending: false,
     items: [
       {
         id: 1,
@@ -38,6 +40,12 @@ export const store = new Vuex.Store({
         }
       })
       return hardItems
+    },
+    isLoggedIn: state => {
+      return state.isLoggedIn
+    },
+    pending: state => {
+      return state.pending
     }
   },
   mutations: {
@@ -45,6 +53,16 @@ export const store = new Vuex.Store({
       store.state.items.forEach(item => {
         item.priority = (item.priority + payload) % 3
       })
+    },
+    [LOGIN] (state) {
+      state.pending = true
+    },
+    [LOGIN_SUCCESS] (state) {
+      state.isLoggedIn = true
+      state.pending = false
+    },
+    [LOGOUT] (state) {
+      state.isLoggedIn = false
     }
   },
   actions: {
@@ -52,6 +70,30 @@ export const store = new Vuex.Store({
       setTimeout(function () {
         context.commit('changePriorities', payload)
       }, 2000)
+    },
+    register () {
+      console.log('registering...')
+    },
+    login ({
+      state,
+      commit,
+      rootState
+    }, creds) {
+      console.log('login...', creds)
+      commit(LOGIN) // show spinner
+      return new Promise(resolve => {
+        setTimeout(() => {
+          localStorage.setItem('token', 'JWT')
+          commit(LOGIN_SUCCESS)
+          resolve()
+        }, 1000)
+      })
+    },
+    logout ({
+      commit
+    }) {
+      localStorage.removeItem('token')
+      commit(LOGOUT)
     }
   }
 })

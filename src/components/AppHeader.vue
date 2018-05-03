@@ -5,22 +5,35 @@
         <router-link :to="{ name: 'TodoList' }" exact>Home</router-link>
       </li>
       <li>
-        <router-link :to="{ name: 'CreateItem' }" exact>Create a TODO</router-link>
+        <router-link :to="{ name: 'CreateItem' }" v-if="isLoggedIn" exact>Create a TODO</router-link>
       </li>
     </ul>
     <ul id="auth">
       <li>
-        <router-link :to="{ name: 'AppLogin' }" exact>Login</router-link>
+        <router-link :to="{ name: 'AppLogin' }" v-if="!isLoggedIn" exact>Login</router-link>
       </li>
       <li>
         <router-link :to="{ name: 'AppRegister' }" exact>Register</router-link>
       </li>
+      <li>
+        <a href="#" v-if="isLoggedIn" v-on:click="logout">Logout</a>
+      </li>
     </ul>
+
   </nav>
 </template>
 
 <script>
-export default {}
+import { mapActions, mapGetters } from 'vuex'
+
+export default {
+  methods: {
+    ...mapActions(['logout'])
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  }
+}
 </script>
 
 <style scoped>
