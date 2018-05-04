@@ -13,9 +13,15 @@
         </router-link>
       </ul>
       <p class="pill" v-if="ITEMS && ITEMS.length == 0">
-        You currently have no todos! Why don't you
+        You don't have any todos! Why don't you
         <router-link :to="{ name: 'CreateItem' }">create one?</router-link>
       </p>
+    </div>
+    <div v-if="!IS_LOGGED_IN">
+      We don't know who you are :/ Please
+      <router-link :to="{ name: 'AppLogin' }" exact>login</router-link> or
+      <router-link :to="{ name: 'AppRegister' }" exact>register</router-link>,
+      so we can create and show you some todos.
     </div>
   </div>
 </template>
