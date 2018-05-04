@@ -3,11 +3,13 @@
     <input type="text" placeholder="email" v-model="email">
     <input type="password" placeholder="password" v-model="password">
     <button type="submit">Login</button>
-    <div class="spinner" v-if="pending"></div>
+    <div class="spinner" v-if="status"></div>
   </form>
 </template>
 
 <script>
+import { AUTH_REQUEST } from '../constants'
+
 export default {
   name: 'AppLogin',
   data () {
@@ -17,13 +19,13 @@ export default {
     }
   },
   computed: {
-    pending () {
-      return this.$store.getters.pending
+    status () {
+      return this.$store.getters.status
     }
   },
   methods: {
     login () {
-      this.$store.dispatch('login', {
+      this.$store.dispatch(AUTH_REQUEST, {
         email: this.email,
         password: this.password
       }).then(res => {

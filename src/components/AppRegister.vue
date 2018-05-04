@@ -4,7 +4,7 @@
     <input type="email" placeholder="email" v-model="email">
     <input type="password" placeholder="password" v-model="password">
     <button type="submit">Register</button>
-    <div class="spinner" v-if="pending"></div>
+    <div class="spinner" v-if="status === 'loading'"></div>
   </form>
 </template>
 
@@ -19,8 +19,10 @@ export default {
     }
   },
   computed: {
-    pending () {
-      return this.$store.state.pending
+    status () {
+      console.log(this.$store.state.status)
+      console.log(this.$store.state.status === 'loading')
+      return this.$store.state.status
     }
   },
   methods: {

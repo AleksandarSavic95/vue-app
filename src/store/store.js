@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { LOGIN, LOGIN_SUCCESS, LOGOUT } from '../constants'
+import * as constants from '../constants'
+import axiosApi, { setAuthHeader } from '../axiosApi'
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    isLoggedIn: localStorage.getItem('token'),
-    pending: false,
+    token: localStorage.getItem('token') || '',
+    status: '',
     items: [
       {
         id: 1,
@@ -41,12 +42,8 @@ export const store = new Vuex.Store({
       })
       return hardItems
     },
-    isLoggedIn: state => {
-      return state.isLoggedIn
-    },
-    pending: state => {
-      return state.pending
-    }
+    [constants.IS_LOGGED_IN]: state => !!state.token,
+    status: state => state.status
   },
   mutations: {
     changePriorities: (state, payload) => {
@@ -54,15 +51,19 @@ export const store = new Vuex.Store({
         item.priority = (item.priority + payload) % 3
       })
     },
-    [LOGIN] (state) {
-      state.pending = true
+    [constants.AUTH_REQUEST] (state) {
+      state.status = 'loading'
     },
-    [LOGIN_SUCCESS] (state) {
-      state.isLoggedIn = true
-      state.pending = false
+    [constants.AUTH_SUCCESS] (state, token) {
+      state.token = token
+      state.status = 'success'
     },
-    [LOGOUT] (state) {
-      state.isLoggedIn = false
+    [constants.AUTH_LOGOUT] (state) {
+      state.token = ''
+      state.status = ''
+    },
+    [constants.AUTH_ERROR] (state) {
+      state.status = 'error'
     }
   },
   actions: {
@@ -74,26 +75,42 @@ export const store = new Vuex.Store({
     register () {
       console.log('registering...')
     },
-    login ({
-      state,
-      commit,
-      rootState
-    }, creds) {
-      console.log('login...', creds)
-      commit(LOGIN) // show spinner
-      return new Promise(resolve => {
-        setTimeout(() => {
-          localStorage.setItem('token', 'JWT')
-          commit(LOGIN_SUCCESS)
-          resolve()
-        }, 1000)
+    [constants.AUTH_REQUEST] ({state, commit, rootState}, creds) {
+      commit(constants.AUTH_REQUEST) // show spinner
+
+      return new Promise((resolve, reject) => {
+        axiosApi.post('/api/auth/login', creds)
+          .then(resp => {
+            const token = resp.data.access_token
+            localStorage.setItem('token', token)
+            setAuthHeader(token)
+
+            commit(constants.AUTH_SUCCESS, resp)
+            resolve(resp)
+          })
+          .catch(err => {
+            commit(constants.AUTH_ERROR, err)
+            localStorage.removeItem('token')
+            reject(err)
+          })
       })
     },
-    logout ({
-      commit
-    }) {
-      localStorage.removeItem('token')
-      commit(LOGOUT)
+    [constants.AUTH_LOGOUT]: ({commit, dispatch}) => {
+      return new Promise((resolve, reject) => {
+        axiosApi.post('/api/auth/logout', null)
+          .then(resp => {
+            localStorage.removeItem('token')
+            setAuthHeader('')
+            commit(constants.AUTH_LOGOUT)
+
+            resolve(resp)
+          })
+          .catch(err => {
+            commit(constants.AUTH_ERROR, err)
+            localStorage.removeItem('token')
+            reject(err)
+          })
+      })
     }
   }
 })
