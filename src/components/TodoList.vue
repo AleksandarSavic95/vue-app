@@ -1,47 +1,36 @@
 <template>
-  <div class="header">
+  <div class="items">
     <h1>TODO list</h1>
-    <div class="list">
-      <ul class="items">
-        <router-link v-for="(item, index) in items" :key="index"
+    <div class="list" v-if="IS_LOGGED_IN">
+      <ul v-if="ITEMS && ITEMS.length" class="items">
+        <router-link v-for="(item, index) in ITEMS" :key="index"
           :to="{path: '/todoitems/' + item.id}">
           <li>
             {{ item.title }}
-            <span v-bind:class="['priority badge badge-pill priority-' + item.priority]">&nbsp;</span>
+            <span class="priority badge badge-pill"
+              v-bind:class="['priority-' + item.priority]">&nbsp;</span>
           </li>
         </router-link>
       </ul>
+      <p class="pill" v-if="ITEMS && ITEMS.length == 0">
+        You currently have no todos! Why don't you
+        <router-link :to="{ name: 'CreateItem' }">create one?</router-link>
+      </p>
     </div>
-    <button v-on:click="changePriorities(2)">Change priorities</button>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
+import { ITEMS, IS_LOGGED_IN } from '../constants'
 
 export default {
   name: 'TodoList',
   computed: {
-    items () {
-      return this.$store.state.items
-    },
-    // hardItems () {
-    //   return this.$store.getters.hardItems
-    // }
-    ...mapGetters([
-      'hardItems' // , 'secondGetter'
-    ])
+    ...mapGetters([ITEMS, IS_LOGGED_IN])
   },
-  data () {
-    return {}
-  },
-  methods: {
-    // changePriorities: function (increment) {
-    //   this.$store.dispatch('changePriorities', increment)
-    // }
-    ...mapActions([
-      'changePriorities'
-    ])
+  mounted: () => {
+    console.log('mounted!!!!')
   }
 }
 </script>
@@ -50,6 +39,14 @@ export default {
 <style>
 .items ul {
     padding: 50px;
+}
+
+.items a {
+  color: #b3b3b3;
+}
+
+.items a:hover {
+  color: #d8d8d8;
 }
 
 /* Style the list items */
@@ -87,16 +84,16 @@ ul.items li.checked::before {
   width: 7px;
 }
 
-/* Style the header */
-.header {
+/* Style the items container */
+.items {
   background-color: #369;
   padding: 30px 40px;
-  color: #fff;
+  color: #000;
   text-align: center;
 }
 
-/* Clear floats after the header */
-.header:after {
+/* Clear floats after the items container */
+.items:after {
   content: "";
   display: table;
   clear: both;

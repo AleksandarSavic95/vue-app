@@ -9,48 +9,14 @@ export const store = new Vuex.Store({
   state: {
     token: localStorage.getItem('token') || '',
     status: '',
-    items: [
-      {
-        id: 1,
-        title: 'Get some milk',
-        content: '2.8 / 3.2 milk fat',
-        priority: 0
-      },
-      {
-        id: 2,
-        title: 'Go to work',
-        content: 'again',
-        priority: 1
-      },
-      {
-        id: 3,
-        title: 'Do whatever you want',
-        content: 'as long as you can',
-        priority: 2
-      }
-    ]
+    items: []
   },
   getters: {
-    hardItems: state => {
-      var hardItems = state.items.map(item => {
-        return {
-          id: item.id,
-          title: 'Hard way to ' + item.title,
-          content: item.content,
-          priority: 2
-        }
-      })
-      return hardItems
-    },
     [constants.IS_LOGGED_IN]: state => !!state.token,
-    status: state => state.status
+    status: state => state.status,
+    [constants.ITEMS]: state => state.items
   },
   mutations: {
-    changePriorities: (state, payload) => {
-      store.state.items.forEach(item => {
-        item.priority = (item.priority + payload) % 3
-      })
-    },
     [constants.AUTH_REQUEST] (state) {
       state.status = 'loading'
     },
@@ -67,7 +33,7 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    changePriorities: (context, payload) => {
+    [constants.ITEMS]: (context, payload) => {
       setTimeout(function () {
         context.commit('changePriorities', payload)
       }, 2000)
