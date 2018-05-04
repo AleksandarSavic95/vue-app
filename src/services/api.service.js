@@ -23,6 +23,10 @@ class ApiService {
   logout () {
     return axios.post('/api/auth/logout')
   }
+
+  getItems () {
+    return axios.get('/api/todoItems')
+  }
 }
 
 const apiService = new ApiService()

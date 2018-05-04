@@ -23,20 +23,31 @@
       <router-link :to="{ name: 'AppRegister' }" exact>register</router-link>,
       so we can create and show you some todos.
     </div>
+    <div class="spinner" v-if="STATUS === 'loading'"></div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { ITEMS, IS_LOGGED_IN } from '../constants'
+import { ITEMS, STATUS, IS_LOGGED_IN } from '../constants'
 
 export default {
   name: 'TodoList',
   computed: {
-    ...mapGetters([ITEMS, IS_LOGGED_IN])
+    ...mapGetters([ITEMS, STATUS, IS_LOGGED_IN])
   },
-  mounted: () => {
-    console.log('mounted!!!!')
+  methods: {
+    getItems: function () {
+      this.$store.dispatch(ITEMS)
+        .then(() => {
+          console.log('items arrived!')
+        })
+    }
+  },
+  mounted () {
+    if (this[IS_LOGGED_IN]) {
+      this.getItems()
+    }
   }
 }
 </script>
