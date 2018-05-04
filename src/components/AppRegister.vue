@@ -20,8 +20,6 @@ export default {
   },
   computed: {
     status () {
-      console.log(this.$store.state.status)
-      console.log(this.$store.state.status === 'loading')
       return this.$store.state.status
     }
   },

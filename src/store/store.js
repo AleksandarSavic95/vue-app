@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import * as constants from '../constants'
-import axiosApi, { setAuthHeader } from '../axiosApi'
+import apiService from '../services/api.service'
 
 Vue.use(Vuex)
 
@@ -73,44 +73,35 @@ export const store = new Vuex.Store({
       }, 2000)
     },
     register () {
-      console.log('registering...')
     },
     [constants.AUTH_REQUEST] ({state, commit, rootState}, creds) {
       commit(constants.AUTH_REQUEST) // show spinner
 
-      return new Promise((resolve, reject) => {
-        axiosApi.post('/api/auth/login', creds)
-          .then(resp => {
-            const token = resp.data.access_token
-            localStorage.setItem('token', token)
-            setAuthHeader(token)
+      return apiService.login(creds)
+        .then(resp => {
+          const token = resp.data.access_token
+          localStorage.setItem('token', token)
+          apiService.setAuthHeader(token)
 
-            commit(constants.AUTH_SUCCESS, resp)
-            resolve(resp)
-          })
-          .catch(err => {
-            commit(constants.AUTH_ERROR, err)
-            localStorage.removeItem('token')
-            reject(err)
-          })
-      })
+          commit(constants.AUTH_SUCCESS, resp)
+        })
+        .catch(err => {
+          localStorage.removeItem('token')
+          apiService.setAuthHeader()
+          commit(constants.AUTH_ERROR, err)
+        })
     },
     [constants.AUTH_LOGOUT]: ({commit, dispatch}) => {
-      return new Promise((resolve, reject) => {
-        axiosApi.post('/api/auth/logout', null)
-          .then(resp => {
-            localStorage.removeItem('token')
-            setAuthHeader('')
-            commit(constants.AUTH_LOGOUT)
-
-            resolve(resp)
-          })
-          .catch(err => {
-            commit(constants.AUTH_ERROR, err)
-            localStorage.removeItem('token')
-            reject(err)
-          })
-      })
+      return apiService.logout()
+        .then(resp => {
+          localStorage.removeItem('token')
+          apiService.setAuthHeader()
+          commit(constants.AUTH_LOGOUT)
+        })
+        .catch(err => {
+          localStorage.removeItem('token')
+          commit(constants.AUTH_ERROR, err)
+        })
     }
   }
 })
