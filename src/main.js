@@ -6,16 +6,6 @@ import router from './router'
 
 import { store } from './store/store'
 
-// // axios support
-// import axiosApi from './axiosApi'
-// Vue.prototype.$http = axiosApi
-
-// // test requests with a base url
-// Vue.prototype.$http({
-//   url: '/test-axios',
-//   method: 'GET'
-// }).then(resp => console.log(resp))
-
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

@@ -3,7 +3,7 @@
     <input type="text" placeholder="email" v-model="email">
     <input type="password" placeholder="password" v-model="password">
     <button type="submit">Login</button>
-    <div class="spinner" v-if="status"></div>
+    <div class="spinner" v-if="status === 'loading'"></div>
   </form>
 </template>
 
