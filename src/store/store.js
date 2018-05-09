@@ -9,49 +9,15 @@ export const store = new Vuex.Store({
   state: {
     token: localStorage.getItem('token') || '',
     status: '',
-    items: [
-      {
-        id: 1,
-        title: 'Get some milk',
-        content: '2.8 / 3.2 milk fat',
-        priority: 0
-      },
-      {
-        id: 2,
-        title: 'Go to work',
-        content: 'again',
-        priority: 1
-      },
-      {
-        id: 3,
-        title: 'Do whatever you want',
-        content: 'as long as you can',
-        priority: 2
-      }
-    ]
+    items: []
   },
   getters: {
-    hardItems: state => {
-      var hardItems = state.items.map(item => {
-        return {
-          id: item.id,
-          title: 'Hard way to ' + item.title,
-          content: item.content,
-          priority: 2
-        }
-      })
-      return hardItems
-    },
     [constants.IS_LOGGED_IN]: state => !!state.token,
-    status: state => state.status
+    [constants.STATUS]: state => state.status,
+    [constants.ITEMS]: state => state.items
   },
   mutations: {
-    changePriorities: (state, payload) => {
-      store.state.items.forEach(item => {
-        item.priority = (item.priority + payload) % 3
-      })
-    },
-    [constants.AUTH_REQUEST] (state) {
+    [constants.START_REQUEST] (state) {
       state.status = 'loading'
     },
     [constants.AUTH_SUCCESS] (state, token) {
@@ -64,18 +30,30 @@ export const store = new Vuex.Store({
     },
     [constants.AUTH_ERROR] (state) {
       state.status = 'error'
+    },
+    [constants.ITEMS] (state, items) {
+      state.items = items
+      state.status = ''
     }
   },
   actions: {
-    changePriorities: (context, payload) => {
-      setTimeout(function () {
-        context.commit('changePriorities', payload)
-      }, 2000)
+    [constants.ITEMS]: ({state, commit}) => {
+      commit(constants.START_REQUEST) // show spinner
+
+      return apiService.getItems()
+        .then(resp => {
+          const items = resp.data
+          console.log(items)
+          commit(constants.ITEMS, items)
+        })
+        .catch(err => {
+          commit(constants.AUTH_ERROR, err)
+        })
     },
     register () {
     },
-    [constants.AUTH_REQUEST] ({state, commit, rootState}, creds) {
-      commit(constants.AUTH_REQUEST) // show spinner
+    [constants.START_REQUEST] ({state, commit, rootState}, creds) {
+      commit(constants.START_REQUEST) // show spinner
 
       return apiService.login(creds)
         .then(resp => {

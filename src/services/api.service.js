@@ -2,7 +2,7 @@ import axios from 'axios'
 
 class ApiService {
   constructor () {
-    axios.defaults.baseURL = 'http://localhost:8000/'
+    axios.defaults.baseURL = 'http://localhost:8000/api'
     // Set the initial header from storage
     let token = localStorage.getItem('token') || ''
     if (token) {
@@ -17,11 +17,27 @@ class ApiService {
 
   // API methods
   login (credentials) {
-    return axios.post('/api/auth/login', credentials)
+    return axios.post('/auth/login', credentials)
   }
 
   logout () {
-    return axios.post('/api/auth/logout')
+    return axios.post('/auth/logout')
+  }
+
+  getItems () {
+    return axios.get('/todoItems')
+  }
+
+  getItem (id) {
+    return axios.get(`/todoItems/${id}`)
+  }
+
+  updateItem (updatedItem) {
+    return axios.put(`/todoItems/${updatedItem.id}`, updatedItem)
+  }
+
+  deleteItem (itemId) {
+    return axios.delete(`/todoItems/${itemId}`)
   }
 }
 
