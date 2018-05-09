@@ -8,7 +8,7 @@
           <li>
             {{ item.title }}
             <span class="priority badge badge-pill"
-              v-bind:class="['priority-' + item.priority]">&nbsp;</span>
+              :class="['priority-' + item.priority]">&nbsp;</span>
           </li>
         </router-link>
       </ul>
@@ -37,7 +37,7 @@ export default {
     ...mapGetters([GET_ITEMS, STATUS, IS_LOGGED_IN])
   },
   methods: {
-    getItems: function () {
+    getItems () {
       this.$store.dispatch(GET_ITEMS)
     }
   },

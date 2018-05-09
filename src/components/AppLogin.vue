@@ -29,7 +29,7 @@ export default {
         email: this.email,
         password: this.password
       }).then(res => {
-        this.$router.push('/')
+        this.$router.push({ name: 'TodoList' })
       })
     }
   }
