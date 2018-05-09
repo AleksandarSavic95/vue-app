@@ -4,7 +4,7 @@
     <div class="list" v-if="IS_LOGGED_IN">
       <ul v-if="ITEMS && ITEMS.length" class="items">
         <router-link v-for="(item, index) in ITEMS" :key="index"
-          :to="{path: '/todoitems/' + item.id}">
+          :to="{ name: 'ViewItem', params: { item, id: item.id } }">
           <li>
             {{ item.title }}
             <span class="priority badge badge-pill"
@@ -29,12 +29,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { ITEMS, STATUS, IS_LOGGED_IN } from '../constants'
+import { GET_ITEMS, STATUS, IS_LOGGED_IN } from '../constants'
 
 export default {
   name: 'TodoList',
   computed: {
-    ...mapGetters([ITEMS, STATUS, IS_LOGGED_IN])
+    ...mapGetters([GET_ITEMS, STATUS, IS_LOGGED_IN])
   },
   methods: {
     getItems () {

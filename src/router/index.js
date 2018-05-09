@@ -24,9 +24,10 @@ export default new Router({
       component: CreateItem
     },
     {
-      path: '/view',
+      path: '/view-item/:id',
       name: 'ViewItem',
-      component: ViewItem
+      component: ViewItem,
+      props: true
     },
     {
       path: '/login',
