@@ -16,12 +16,7 @@ export const store = new Vuex.Store({
     [constants.STATUS]: state => state.status,
     [constants.GET_ITEMS]: state => state.items,
     [constants.GET_ITEM]: state => (id) => {
-      console.log('getter GET_ITEM says:\n items: ')
-      console.log(state.items)
-      var found = state.items.find(item => item.id === id)
-      console.log('found, id')
-      console.log(found, id)
-      return found
+      return state.items.find(item => item.id === Number(id))
     }
   },
   mutations: {
@@ -45,19 +40,17 @@ export const store = new Vuex.Store({
     },
     [constants.UPDATE_ITEM] (state, item) {
       var i = state.items.findIndex(o => o.id === item.id)
-      console.log('looking for item ')
-      console.log(item)
-      console.log('in items:')
-      console.log(state.items)
-      console.log('index: ' + i + ' bool(state.items[i]) ' + !!state.items[i])
       if (state.items[i]) {
-        state.items[i] = item
-      } else { // if `items` wasn't filled
-        state.items.push(item)
+        state.items.splice(i, 1, item)
+      } else { // if items were empty, i.e. page was refreshed
+        state.items = [item]
       }
       state.status = ''
-      console.log('update_item done!. items:')
-      console.log(state.items)
+    },
+    [constants.DELETE_ITEM] (state, itemId) {
+      var i = state.items.findIndex(o => o.id === itemId)
+      state.items.splice(1, i)
+      state.status = '' // no need, since we will navigate to List component
     }
   },
   actions: {
@@ -79,8 +72,30 @@ export const store = new Vuex.Store({
       return apiService.getItem(id)
         .then(resp => {
           const item = resp.data
-          console.log(item)
           commit(constants.UPDATE_ITEM, item)
+        })
+        .catch(err => {
+          console.log('error ', err)
+        })
+    },
+    [constants.UPDATE_ITEM]: ({state, commit}, updatedItem) => {
+      commit(constants.START_REQUEST)
+
+      return apiService.updateItem(updatedItem)
+        .then(resp => {
+          const savedItem = resp.data
+          commit(constants.UPDATE_ITEM, savedItem)
+        })
+        .catch(err => {
+          console.log('error ', err)
+        })
+    },
+    [constants.DELETE_ITEM]: ({state, commit}, itemId) => {
+      commit(constants.START_REQUEST)
+
+      return apiService.deleteItem(itemId)
+        .then(resp => {
+          commit(constants.DELETE_ITEM, itemId)
         })
         .catch(err => {
           console.log('error ', err)
@@ -88,7 +103,7 @@ export const store = new Vuex.Store({
     },
     register () {
     },
-    [constants.START_REQUEST] ({state, commit, rootState}, creds) {
+    [constants.AUTH_REQUEST] ({state, commit, rootState}, creds) {
       commit(constants.START_REQUEST) // show spinner
 
       return apiService.login(creds)

@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { STATUS } from '../constants'
+
 export default {
   name: 'AppRegister',
   data () {
@@ -19,8 +21,8 @@ export default {
     }
   },
   computed: {
-    status () {
-      return this.$store.state.status
+    [STATUS] () {
+      return this.$store.getters[STATUS]
     }
   },
   methods: {

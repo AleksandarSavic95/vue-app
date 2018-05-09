@@ -27,6 +27,18 @@ class ApiService {
   getItems () {
     return axios.get('/api/todoItems')
   }
+
+  getItem (id) {
+    return axios.get(`/api/todoItems/${id}`)
+  }
+
+  updateItem (updatedItem) {
+    return axios.put(`/api/todoItems/${updatedItem.id}`, updatedItem)
+  }
+
+  deleteItem (itemId) {
+    return axios.delete(`/api/todoItems/${itemId}`)
+  }
 }
 
 const apiService = new ApiService()
