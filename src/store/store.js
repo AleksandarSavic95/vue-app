@@ -38,6 +38,10 @@ export const store = new Vuex.Store({
       state.items = items
       state.status = ''
     },
+    [constants.CREATE_ITEM] (state, newItem) {
+      state.items.push(newItem)
+      state.status = ''
+    },
     [constants.UPDATE_ITEM] (state, item) {
       var i = state.items.findIndex(o => o.id === item.id)
       if (state.items[i]) {
@@ -78,13 +82,23 @@ export const store = new Vuex.Store({
           console.log('error ', err)
         })
     },
+    [constants.CREATE_ITEM]: ({state, commit}, newItem) => {
+      commit(constants.START_REQUEST)
+
+      return apiService.createItem(newItem)
+        .then(resp => {
+          commit(constants.CREATE_ITEM, resp.data)
+        })
+        .catch(err => {
+          console.log('error ', err)
+        })
+    },
     [constants.UPDATE_ITEM]: ({state, commit}, updatedItem) => {
       commit(constants.START_REQUEST)
 
       return apiService.updateItem(updatedItem)
         .then(resp => {
-          const savedItem = resp.data
-          commit(constants.UPDATE_ITEM, savedItem)
+          commit(constants.UPDATE_ITEM, resp.data)
         })
         .catch(err => {
           console.log('error ', err)

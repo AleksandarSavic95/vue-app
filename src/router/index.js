@@ -16,7 +16,8 @@ export default new Router({
     {
       path: '/',
       name: 'TodoList',
-      component: TodoList
+      component: TodoList,
+      props: true
     },
     {
       path: '/create',

@@ -2,9 +2,20 @@
   <div class="items">
     <h1>TODO list</h1>
     <div class="list" v-if="IS_LOGGED_IN">
+      <div v-if="!!itemEventData" class="row">
+        <div v-if="!error" role="alert" class="alert alert-success col-md-4 offset-md-4">
+          Item successfully {{ itemEventData }}!
+          <button type="button" class="close" @click="itemEventData=''" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div v-else>
+          Error! Item not {{ itemEventData }}! <br/> {{ error }}
+        </div>
+      </div>
       <ul v-if="ITEMS && ITEMS.length" class="items">
         <router-link v-for="(item, index) in ITEMS" :key="index"
-          :to="{ name: 'ViewItem', params: { item, id: item.id } }">
+          :to="{ name: 'ViewItem', params: { id: item.id } }">
           <li>
             {{ item.title }}
             <span class="priority badge badge-pill"
@@ -33,6 +44,14 @@ import { GET_ITEMS, STATUS, IS_LOGGED_IN } from '../constants'
 
 export default {
   name: 'TodoList',
+  props: [
+    'itemEvent', 'error'
+  ],
+  data () {
+    return {
+      itemEventData: this.itemEvent || ''
+    }
+  },
   computed: {
     ...mapGetters([GET_ITEMS, STATUS, IS_LOGGED_IN])
   },

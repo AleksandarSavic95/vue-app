@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { STATUS, START_REQUEST } from '../constants'
+import { STATUS, AUTH_REQUEST } from '../constants'
 
 export default {
   name: 'AppLogin',
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     login () {
-      this.$store.dispatch(START_REQUEST, {
+      this.$store.dispatch(AUTH_REQUEST, {
         email: this.email,
         password: this.password
       }).then(res => {
