@@ -5,22 +5,41 @@
         <router-link :to="{ name: 'TodoList' }" exact>Home</router-link>
       </li>
       <li>
-        <router-link :to="{ name: 'CreateItem' }" exact>Create a TODO</router-link>
+        <router-link :to="{ name: 'CreateItem' }" v-if="IS_LOGGED_IN" exact>Create a TODO</router-link>
       </li>
     </ul>
     <ul id="auth">
       <li>
-        <router-link :to="{ name: 'AppLogin' }" exact>Login</router-link>
+        <router-link :to="{ name: 'AppLogin' }" v-if="!IS_LOGGED_IN" exact>Login</router-link>
       </li>
       <li>
-        <router-link :to="{ name: 'AppRegister' }" exact>Register</router-link>
+        <router-link :to="{ name: 'AppRegister' }" v-if="!IS_LOGGED_IN" exact>Register</router-link>
+      </li>
+      <li>
+        <a href="#" v-if="IS_LOGGED_IN" v-on:click="logout">Logout</a>
       </li>
     </ul>
+
   </nav>
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+import { AUTH_LOGOUT, IS_LOGGED_IN } from '../constants'
+
+export default {
+  methods: {
+    logout: function () {
+      this.$store.dispatch(AUTH_LOGOUT)
+        .then(() => {
+          this.$router.push('/login')
+        })
+    }
+  },
+  computed: {
+    ...mapGetters([IS_LOGGED_IN])
+  }
+}
 </script>
 
 <style scoped>

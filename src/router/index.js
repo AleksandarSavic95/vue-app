@@ -5,6 +5,8 @@ import BootstrapVue from 'bootstrap-vue'
 import TodoList from '@/components/TodoList'
 import CreateItem from '@/components/CreateItem'
 import ViewItem from '@/components/ViewItem'
+import AppLogin from '@/components/AppLogin'
+import AppRegister from '@/components/AppRegister'
 
 Vue.use(Router)
 Vue.use(BootstrapVue)
@@ -25,6 +27,16 @@ export default new Router({
       path: '/view',
       name: 'ViewItem',
       component: ViewItem
+    },
+    {
+      path: '/login',
+      name: 'AppLogin',
+      component: AppLogin
+    },
+    {
+      path: '/register',
+      name: 'AppRegister',
+      component: AppRegister
     }
   ]
 })
