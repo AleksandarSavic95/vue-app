@@ -16,7 +16,7 @@
         <router-link :to="{ name: 'AppRegister' }" v-if="!IS_LOGGED_IN" exact>Register</router-link>
       </li>
       <li>
-        <a href="#" v-if="IS_LOGGED_IN" v-on:click="logout">Logout</a>
+        <a href="#" v-if="IS_LOGGED_IN" @click="logout">Logout</a>
       </li>
     </ul>
 
@@ -29,10 +29,10 @@ import { AUTH_LOGOUT, IS_LOGGED_IN } from '../constants'
 
 export default {
   methods: {
-    logout: function () {
+    logout () {
       this.$store.dispatch(AUTH_LOGOUT)
         .then(() => {
-          this.$router.push('/login')
+          this.$router.push({ name: 'AppLogin' })
         })
     }
   },
