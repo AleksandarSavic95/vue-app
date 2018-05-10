@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { CREATE_ITEM, STATUS } from '../constants'
+import { CREATE_ITEM, STATUS, ITEM_CREATED, ITEM_NOT_CREATED } from '../constants'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -57,13 +57,13 @@ export default {
         .then(() => {
           this.$router.push({
             name: 'TodoList',
-            params: { itemEvent: 'created' }
+            params: { itemEvent: ITEM_CREATED }
           })
         })
         .catch(error => {
           this.$router.push({
             name: 'TodoList',
-            params: { from: 'not created', error }
+            params: { itemEvent: ITEM_NOT_CREATED, error }
           })
         })
     }

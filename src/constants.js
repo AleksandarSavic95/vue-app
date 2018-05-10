@@ -10,7 +10,11 @@ export const GET_ITEMS = 'ITEMS'
 export const GET_ITEM = 'GET_ITEM'
 export const UPDATE_ITEM = 'UPDATE_ITEM'
 export const DELETE_ITEM = 'DELETE_ITEM'
-
 export const CREATE_ITEM = 'CREATE_ITEM'
 
 export const STATUS = 'STATUS'
+
+export const ITEM_CREATED = 'Item created'
+export const ITEM_DELETED = 'Item deleted'
+export const ITEM_NOT_CREATED = 'Item not created'
+export const ITEM_NOT_DELETED = 'Item not deleted'

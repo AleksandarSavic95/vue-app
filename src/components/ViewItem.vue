@@ -55,13 +55,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { GET_ITEM, UPDATE_ITEM, DELETE_ITEM, STATUS } from '../constants'
+import { GET_ITEM, UPDATE_ITEM, DELETE_ITEM, STATUS, ITEM_DELETED, ITEM_NOT_DELETED } from '../constants'
 
 export default {
   name: 'ViewItem',
-  props: [
-    'id'
-  ],
+  props: {
+    id: Number
+  },
   computed: {
     item () {
       return this.$store.getters[GET_ITEM](this.$route.params.id)
@@ -101,7 +101,13 @@ export default {
         .then(() => {
           this.$router.push({
             name: 'TodoList',
-            params: { itemEvent: 'deleted' }
+            params: { itemEvent: ITEM_DELETED }
+          })
+        })
+        .catch(error => {
+          this.$router.push({
+            name: 'TodoList',
+            params: { itemEvent: ITEM_NOT_DELETED, error }
           })
         })
     }
