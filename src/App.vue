@@ -28,7 +28,11 @@ export default {
 }
 
 body, ul {
-    margin: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #369;
 }
 
 a {

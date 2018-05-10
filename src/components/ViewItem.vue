@@ -55,13 +55,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { GET_ITEM, UPDATE_ITEM, DELETE_ITEM, STATUS } from '../constants'
+import { GET_ITEM, UPDATE_ITEM, DELETE_ITEM, STATUS, ITEM_DELETED, ITEM_NOT_DELETED } from '../constants'
 
 export default {
   name: 'ViewItem',
-  props: [
-    'id'
-  ],
+  props: {
+    id: Number
+  },
   computed: {
     item () {
       return this.$store.getters[GET_ITEM](this.$route.params.id)
@@ -86,10 +86,10 @@ export default {
     saveItem () {
       const updatedItem = {
         id: this.item.id,
-        title: this.$refs['title'].value,
-        content: this.$refs['content'].value,
-        priority: Number(this.$refs['priority'].value),
-        is_done: Number(this.$refs['is_done'].checked)
+        title: this.$refs.title.value,
+        content: this.$refs.content.value,
+        priority: Number(this.$refs.priority.value),
+        is_done: Number(this.$refs.is_done.checked)
       }
       if (this.itemChanged(updatedItem)) {
         this.$store.dispatch(UPDATE_ITEM, updatedItem)
@@ -99,7 +99,16 @@ export default {
     deleteItem () {
       this.$store.dispatch(DELETE_ITEM, this.item.id)
         .then(() => {
-          this.$router.push({name: 'TodoList'})
+          this.$router.push({
+            name: 'TodoList',
+            params: { itemEvent: ITEM_DELETED }
+          })
+        })
+        .catch(error => {
+          this.$router.push({
+            name: 'TodoList',
+            params: { itemEvent: ITEM_NOT_DELETED, error }
+          })
         })
     }
   },

@@ -47,6 +47,7 @@ nav {
     background: #444;
     padding: 14px 0;
     height: 60px;
+    margin-bottom: 30px;
 }
 nav a {
   color: #fff;

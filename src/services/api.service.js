@@ -32,24 +32,16 @@ class ApiService {
     return axios.get(`/todoItems/${id}`)
   }
 
+  createItem (newItem) {
+    return axios.post(`/todoItems`, newItem)
+  }
+
   updateItem (updatedItem) {
     return axios.put(`/todoItems/${updatedItem.id}`, updatedItem)
   }
 
   deleteItem (itemId) {
     return axios.delete(`/todoItems/${itemId}`)
-  }
-
-  getItem (id) {
-    return axios.get(`/api/todoItems/${id}`)
-  }
-
-  updateItem (updatedItem) {
-    return axios.put(`/api/todoItems/${updatedItem.id}`, updatedItem)
-  }
-
-  deleteItem (itemId) {
-    return axios.delete(`/api/todoItems/${itemId}`)
   }
 }
 
