@@ -18,10 +18,11 @@ export const CREATE_ITEM = 'CREATE_ITEM'
 
 export const STATUS = 'STATUS'
 
-export const ITEM_CREATED = 'Item created'
-export const ITEM_DELETED = 'Item deleted'
-export const ITEM_NOT_CREATED = 'Item not created'
-export const ITEM_NOT_DELETED = 'Item not deleted'
+export const ITEM_CREATED = 'Item created!'
+export const ITEM_NOT_CREATED = 'Item not created!'
+
+export const ITEM_DELETED = 'Item deleted!'
+export const ITEM_NOT_DELETED = 'Item not deleted!'
 
 export const USER_REGISTERED = 'Registration complete! You are logged in.'
 export const USER_NOT_REGISTERED = 'Error during registration!'

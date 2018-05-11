@@ -4,14 +4,14 @@
     <div class="list" v-if="IS_LOGGED_IN">
       <div v-if="!!itemEventDescription" class="row">
         <div v-if="!error" role="alert" class="alert alert-success col-md-4 offset-md-4">
-          {{ itemEventDescription }}!
+          {{ itemEventDescription }}
           <button type="button" class="close" @click="itemEventDescription=''"
             data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div v-else>
-          Error! {{ itemEventDescription }}! <br/> {{ error }}
+          Error! {{ itemEventDescription }} <br/> {{ error }}
         </div>
       </div>
       <ul v-if="ITEMS && ITEMS.length" class="items">
