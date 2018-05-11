@@ -15,33 +15,36 @@
         </div>
       </div>
       <ul v-if="ITEMS && ITEMS.length" class="items">
-        <router-link v-for="(item, index) in ITEMS" :key="index"
-          :to="{ name: 'ViewItem', params: { id: item.id } }">
-          <li>
+        <li v-for="(item, index) in ITEMS" :key="index" :class="{ checked: item.is_done }">
+          <input type="checkbox" :checked="item.is_done" name="done"
+            @click="toggleDone(item)">
+          <router-link :to="{ name: 'ViewItem', params: { id: item.id } }">
             {{ item.title }}
-            <span class="priority badge badge-pill"
-              :class="['priority-' + item.priority]">&nbsp;</span>
-          </li>
-        </router-link>
+          </router-link>
+          <span class="priority badge badge-pill"
+            :class="['priority-' + item.priority]">
+            &nbsp;
+          </span>
+        </li>
       </ul>
-      <p class="pill" v-if="ITEMS && ITEMS.length == 0">
+      <p class="no-items" v-if="ITEMS && ITEMS.length == 0">
         You don't have any todos! Why don't you
         <router-link :to="{ name: 'CreateItem' }">create one?</router-link>
       </p>
+      <div class="spinner" v-if="STATUS === 'loading'"></div>
     </div>
-    <div v-if="!IS_LOGGED_IN">
+    <div v-if="!IS_LOGGED_IN" class="unknown-user">
       We don't know who you are :/ Please
       <router-link :to="{ name: 'AppLogin' }" exact>login</router-link> or
       <router-link :to="{ name: 'AppRegister' }" exact>register</router-link>,
       so we can create and show you some todos.
     </div>
-    <div class="spinner" v-if="STATUS === 'loading'"></div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { GET_ITEMS, STATUS, IS_LOGGED_IN } from '../constants'
+import { GET_ITEMS, UPDATE_ITEM, STATUS, IS_LOGGED_IN } from '../constants'
 
 export default {
   name: 'TodoList',
@@ -60,6 +63,13 @@ export default {
   methods: {
     getItems () {
       this.$store.dispatch(GET_ITEMS)
+    },
+    toggleDone (item) {
+      const toggledItem = { ...item, is_done: Number(!item.is_done) }
+      console.log('item, pa toggledItem')
+      console.log(item)
+      console.log(toggledItem)
+      this.$store.dispatch(UPDATE_ITEM, toggledItem)
     }
   },
   mounted () {
@@ -70,22 +80,25 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .items ul {
     padding: 50px;
 }
 
-.items a {
-  color: #b3b3b3;
+.no-items a {
+  padding: 0px !important;
 }
-
+.list a {
+  color: #000000;
+  padding: 0 35%;
+}
 .items a:hover {
   color: #d8d8d8;
 }
 
 /* Style the list items */
 ul.items li {
+  position: relative;
   padding: 12px 8px 12px 40px;
   background: #eee;
   color: #000;
@@ -98,31 +111,25 @@ ul.items li:hover {
   background: rgb(168, 168, 168);
 }
 
+button {
+  border: none;
+}
+
+img.check {
+  float: left;
+  /* display: inline-block; */
+}
+
 /* done items have gray background and striked-out text */
 ul.items li.checked {
   background: #888;
-  color: #fff;
+  color: #fff !important;
   text-decoration: line-through;
-}
-
-/* Add a "checked" mark for done items */
-ul.items li.checked::before {
-  content: '';
-  position: absolute;
-  border-color: #fff;
-  border-style: solid;
-  border-width: 0 2px 2px 0;
-  top: 10px;
-  left: 16px;
-  transform: rotate(45deg);
-  height: 15px;
-  width: 7px;
 }
 
 /* Style the items container */
 .items {
   background-color: #369;
-  padding: 30px 40px;
   color: #000;
   text-align: center;
 }
@@ -137,9 +144,9 @@ ul.items li.checked::before {
 /* priority styles: 0 - low, 1 - mid, 2 - high */
 
 .priority {
-  float: right;
   text-align: center !important;
-  /* padding: 0px 5px; */
+  padding: 5px 20px 5px 10px;
+  float: right;
 }
 
 .badge.priority-0::after {
@@ -161,5 +168,12 @@ ul.items li.checked::before {
 }
 .priority-2 {
   background-color: #ff2020;
+}
+
+input[type=checkbox] {
+  float: left;
+  width: 30px; /*Desired width*/
+  height: 30px; /*Desired height*/
+  cursor: pointer;
 }
 </style>
