@@ -23,6 +23,12 @@ export const store = new Vuex.Store({
     [constants.START_REQUEST] (state) {
       state.status = 'loading'
     },
+    [constants.REGISTER_SUCCESS] (state) {
+      state.status = ''
+    },
+    [constants.REGISTER_ERROR] (state) {
+      state.status = 'error'
+    },
     [constants.AUTH_SUCCESS] (state, token) {
       state.token = token
       state.status = 'success'
@@ -58,6 +64,7 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    /** I T E M S **/
     [constants.GET_ITEMS]: ({state, commit}) => {
       commit(constants.START_REQUEST) // show spinner
 
@@ -115,7 +122,25 @@ export const store = new Vuex.Store({
           console.log('error ', err)
         })
     },
-    register () {
+    /** U S E R S **/
+    [constants.REGISTER_USER] ({state, commit, rootState}, newUser) {
+      commit(constants.START_REQUEST) // show spinner
+
+      return apiService.register(newUser)
+        .then(resp => {
+          const token = resp.data.access_token
+          localStorage.setItem('token', token)
+          apiService.setAuthHeader(token)
+
+          commit(constants.AUTH_SUCCESS, resp.data)
+          commit(constants.REGISTER_SUCCESS)
+        })
+        .catch(err => {
+          commit(constants.REGISTER_ERROR, err)
+          localStorage.removeItem('token')
+          apiService.setAuthHeader()
+          commit(constants.AUTH_ERROR, err)
+        })
     },
     [constants.AUTH_REQUEST] ({state, commit, rootState}, creds) {
       commit(constants.START_REQUEST) // show spinner
@@ -126,7 +151,7 @@ export const store = new Vuex.Store({
           localStorage.setItem('token', token)
           apiService.setAuthHeader(token)
 
-          commit(constants.AUTH_SUCCESS, resp)
+          commit(constants.AUTH_SUCCESS, resp.data)
         })
         .catch(err => {
           localStorage.removeItem('token')

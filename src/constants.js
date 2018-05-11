@@ -6,6 +6,10 @@ export const AUTH_LOGOUT = 'AUTH_LOGOUT'
 export const AUTH_ERROR = 'AUTH_ERROR'
 export const IS_LOGGED_IN = 'IS_LOGGED_IN'
 
+export const REGISTER_USER = 'REGISTER_USER'
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
+export const REGISTER_ERROR = 'REGISTER_ERROR'
+
 export const GET_ITEMS = 'ITEMS'
 export const GET_ITEM = 'GET_ITEM'
 export const UPDATE_ITEM = 'UPDATE_ITEM'
@@ -18,3 +22,6 @@ export const ITEM_CREATED = 'Item created'
 export const ITEM_DELETED = 'Item deleted'
 export const ITEM_NOT_CREATED = 'Item not created'
 export const ITEM_NOT_DELETED = 'Item not deleted'
+
+export const USER_REGISTERED = 'Registration complete! You are logged in.'
+export const USER_NOT_REGISTERED = 'Error during registration!'

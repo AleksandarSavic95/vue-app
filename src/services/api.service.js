@@ -24,6 +24,10 @@ class ApiService {
     return axios.post('/auth/logout')
   }
 
+  register (newUser) {
+    return axios.post('/auth/register', newUser)
+  }
+
   getItems () {
     return axios.get('/todoItems')
   }
